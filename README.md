@@ -2,7 +2,7 @@
 
 [![build](https://img.shields.io/badge/build-0.90-brightgreen)](https://github.com/LanshanTeam/wecqupt)[![go-version](https://img.shields.io/badge/go-~%3D1.19-30dff3?logo=go)](https://github.com/LanshanTeam/wecqupt)
 
-English [中文](README-zh_cn.md)
+English | [中文](README-zh_cn.md)
 
 > Filter sensitive words, support multiple data sources, filter algorithms and functions
 
@@ -53,6 +53,10 @@ func main() {
     // dynamic add sensitive words
     
     err=filterManager.GetStore().AddWord("这是敏感词1", "这是敏感词2", "这是敏感词3")
+    if err != nil {
+        fmt.Println(err)
+        return
+	}
     
     fmt.Println(filterManager.GetFilter().IsSensitive("这是敏感词1,这是敏感词2,这是敏感词3,这是敏感词1,这里没有敏感词"))
     

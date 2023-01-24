@@ -2,7 +2,7 @@
 
 [![build](https://img.shields.io/badge/build-0.90-brightgreen)](https://github.com/LanshanTeam/wecqupt)[![go-version](https://img.shields.io/badge/go-~%3D1.19-30dff3?logo=go)](https://github.com/LanshanTeam/wecqupt)
 
-[English](README.md) 中文
+[English](README.md) | 中文
 
 > 敏感词过滤, 支持多种数据源加载, 多种过滤算法, 多种操作功能
 
@@ -53,6 +53,10 @@ func main() {
     // 动态增加词汇
     
     err=filterManager.GetStore().AddWord("这是敏感词1", "这是敏感词2", "这是敏感词3")
+    if err != nil {
+        fmt.Println(err)
+        return
+	}
     
     fmt.Println(filterManager.GetFilter().IsSensitive("这是敏感词1,这是敏感词2,这是敏感词3,这是敏感词1,这里没有敏感词"))
     
