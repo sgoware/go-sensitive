@@ -1,8 +1,8 @@
 package sensitive
 
 import (
-	"go-sensitive/filter"
-	"go-sensitive/store"
+	"sensitive/filter"
+	"sensitive/store"
 	"sync"
 )
 

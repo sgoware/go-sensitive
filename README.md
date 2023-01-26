@@ -75,7 +75,7 @@ func main() {
 ## ✔ Get
 
 ```
-$ go get -u github.com/stellarisw/go-sensitive
+$ go get -u github.com/StellairsW/go-sensitive
 ```
 
 ## 📂 Import

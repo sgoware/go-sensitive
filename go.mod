@@ -1,4 +1,4 @@
-module go-sensitive
+module sensitive
 
 go 1.19
 
