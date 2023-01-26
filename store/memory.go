@@ -12,15 +12,15 @@ import (
 
 type MemoryModel struct {
 	store   cmap.ConcurrentMap[string, struct{}]
-	AddChan chan string
-	DelChan chan string
+	addChan chan string
+	delChan chan string
 }
 
 func NewMemoryModel() *MemoryModel {
 	return &MemoryModel{
 		store:   cmap.New[struct{}](),
-		AddChan: make(chan string),
-		DelChan: make(chan string),
+		addChan: make(chan string),
+		delChan: make(chan string),
 	}
 }
 
@@ -85,7 +85,7 @@ func (m *MemoryModel) LoadDict(reader io.Reader) error {
 		}
 
 		m.store.Set(string(line), struct{}{})
-		m.AddChan <- string(line)
+		m.addChan <- string(line)
 	}
 
 	return nil
@@ -115,17 +115,17 @@ func (m *MemoryModel) ReadString() []string {
 }
 
 func (m *MemoryModel) GetAddChan() <-chan string {
-	return m.AddChan
+	return m.addChan
 }
 
 func (m *MemoryModel) GetDelChan() <-chan string {
-	return m.DelChan
+	return m.delChan
 }
 
 func (m *MemoryModel) AddWord(words ...string) error {
 	for _, word := range words {
 		m.store.Set(word, struct{}{})
-		m.AddChan <- word
+		m.addChan <- word
 	}
 
 	return nil
@@ -134,7 +134,7 @@ func (m *MemoryModel) AddWord(words ...string) error {
 func (m *MemoryModel) DelWord(words ...string) error {
 	for _, word := range words {
 		m.store.Remove(word)
-		m.DelChan <- word
+		m.delChan <- word
 	}
 
 	return nil

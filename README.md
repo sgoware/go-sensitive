@@ -1,6 +1,6 @@
 # 🚫 go-sensitive
 
-[![build](https://img.shields.io/badge/build-0.90-brightgreen)](https://github.com/LanshanTeam/wecqupt)[![go-version](https://img.shields.io/badge/go-~%3D1.19-30dff3?logo=go)](https://github.com/LanshanTeam/wecqupt)
+[![build](https://img.shields.io/badge/build-1.01-brightgreen)](https://github.com/StellarisW/go-sensitive)[![go-version](https://img.shields.io/badge/go-~%3D1.19-30dff3?logo=go)](https://github.com/StellarisW/go-sensitive)
 
 English | [中文](README-zh_cn.md)
 
@@ -17,6 +17,8 @@ English | [中文](README-zh_cn.md)
     - `FindAllCount()` return all sensitive word with its count that has been found in the text
 - support multiple data sources with dynamic modification
     - support memory storage
+    - support mysql storage
+    - support mongo storage
     - support multiple ways of add dict
     - support dynamic add/del sensitive word while running
 - support multiple filter algorithms
@@ -81,14 +83,12 @@ $ go get -u github.com/StellairsW/go-sensitive
 ## 📂 Import
 
 ```go
-import "github.com/stellarisw/go-sensitive"
+import "github.com/StellairsW/go-sensitive"
 ```
 
 ## 
 
 ## 📌 TODO
 
-- [ ] add mongo data source support
 - [ ] add redis data source support
-- [ ] add mysql data source support
-- [ ] add  bloom algorithm
+- [ ] add bloom algorithm

@@ -1,6 +1,6 @@
 # 🚫 go-sensitive
 
-[![build](https://img.shields.io/badge/build-0.90-brightgreen)](https://github.com/LanshanTeam/wecqupt)[![go-version](https://img.shields.io/badge/go-~%3D1.19-30dff3?logo=go)](https://github.com/LanshanTeam/wecqupt)
+[![build](https://img.shields.io/badge/build-1.01-brightgreen)](https://github.com/StellarisW/go-sensitive)[![go-version](https://img.shields.io/badge/go-~%3D1.19-30dff3?logo=go)](https://github.com/StellarisW/go-sensitive)
 
 [English](README.md) | 中文
 
@@ -17,6 +17,8 @@
     - `FindAllCount()` 返回匹配到的所有敏感词及出现次数
 - 支持多种数据源加载, 动态修改数据源
     - 支持内存存储
+    - 支持mysql存储
+    - 支持mongo存储
     - 支持多种字典加载方式
     - 支持运行过程中动态修改数据源
 - 支持多种过滤算法
@@ -75,13 +77,13 @@ func main() {
 ## ✔ Get
 
 ```
-$ go get -u github.com/stellarisw/go-sensitive
+$ go get -u github.com/StellarisW/go-sensitive
 ```
 
 ## 📂 Import
 
 ```go
-import "github.com/stellarisw/go-sensitive"
+import "github.com/StellarisW/go-sensitive"
 ```
 
 ## 
@@ -89,6 +91,4 @@ import "github.com/stellarisw/go-sensitive"
 ## 📌 TODO
 
 - [ ] add mongo data source support
-- [ ] add redis data source support
-- [ ] add mysql data source support
 - [ ] add  bloom algorithm
