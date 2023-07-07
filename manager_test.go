@@ -2,7 +2,7 @@ package sensitive
 
 import (
 	"fmt"
-	"github.com/StellarisW/go-sensitive/store"
+	"github.com/sgoware/go-sensitive/store"
 	"reflect"
 	"testing"
 	"time"

@@ -1,6 +1,6 @@
 # 🚫 go-sensitive
 
-[![build](https://img.shields.io/badge/build-1.01-brightgreen)](https://github.com/StellarisW/go-sensitive)[![go-version](https://img.shields.io/badge/go-~%3D1.19-30dff3?logo=go)](https://github.com/StellarisW/go-sensitive)
+[![build](https://img.shields.io/badge/build-1.01-brightgreen)](https://github.com/sgoware/go-sensitive)[![go-version](https://img.shields.io/badge/go-~%3D1.19-30dff3?logo=go)](https://github.com/sgoware/go-sensitive)
 
 English | [中文](README-zh_cn.md)
 
@@ -31,7 +31,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/StellarisW/go-sensitive"
+	"github.com/sgoware/go-sensitive"
 )
 
 func main() {
@@ -77,13 +77,13 @@ func main() {
 ## ✔ Get
 
 ```
-$ go get -u github.com/StellairsW/go-sensitive
+$ go get -u github.com/sgoware/go-sensitive
 ```
 
 ## 📂 Import
 
 ```go
-import "github.com/StellairsW/go-sensitive"
+import "github.com/sgoware/go-sensitive"
 ```
 
 ## 

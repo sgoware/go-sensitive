@@ -1,8 +1,8 @@
 package sensitive
 
 import (
-	"github.com/StellarisW/go-sensitive/filter"
-	"github.com/StellarisW/go-sensitive/store"
+	"github.com/sgoware/go-sensitive/filter"
+	"github.com/sgoware/go-sensitive/store"
 	"sync"
 )
 

@@ -1,4 +1,4 @@
-module github.com/StellarisW/go-sensitive
+module github.com/sgoware/go-sensitive
 
 go 1.19
 
