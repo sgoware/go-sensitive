@@ -1,24 +1,24 @@
 package filter
 
-type node struct {
-	children map[rune]*node
+type dfaNode struct {
+	children map[rune]*dfaNode
 	isLeaf   bool
 }
 
-func newNode() *node {
-	return &node{
-		children: make(map[rune]*node),
+func newDfaNode() *dfaNode {
+	return &dfaNode{
+		children: make(map[rune]*dfaNode),
 		isLeaf:   false,
 	}
 }
 
 type DfaModel struct {
-	root *node
+	root *dfaNode
 }
 
 func NewDfaModel() *DfaModel {
 	return &DfaModel{
-		root: newNode(),
+		root: newDfaNode(),
 	}
 }
 
@@ -36,7 +36,7 @@ func (m *DfaModel) AddWord(word string) {
 		if next, ok := now.children[r]; ok {
 			now = next
 		} else {
-			next = newNode()
+			next = newDfaNode()
 			now.children[r] = next
 			now = next
 		}
@@ -47,12 +47,12 @@ func (m *DfaModel) AddWord(word string) {
 
 func (m *DfaModel) DelWords(words ...string) {
 	for _, word := range words {
-		m.DelWords(word)
+		m.DelWord(word)
 	}
 }
 
 func (m *DfaModel) DelWord(word string) {
-	var lastLeaf *node
+	var lastLeaf *dfaNode
 	var lastLeafNextRune rune
 	now := m.root
 	runes := []rune(word)
@@ -86,108 +86,10 @@ func (m *DfaModel) Listen(addChan, delChan <-chan string) {
 	}()
 }
 
-func (m *DfaModel) Filter(text string) string {
-	var found bool
-	var now *node
-
-	start := 0 // 从文本的第几个文字开始匹配
-	parent := m.root
-	runes := []rune(text)
-	length := len(runes)
-	filtered := make([]rune, 0, length)
-
-	for pos := 0; pos < length; pos++ {
-		now, found = parent.children[runes[pos]]
-
-		if !found || (!now.isLeaf && pos == length-1) {
-			filtered = append(filtered, runes[start])
-			parent = m.root
-			pos = start
-			start++
-			continue
-		}
-
-		if now.isLeaf {
-			start = pos + 1
-			parent = m.root
-		} else {
-			parent = now
-		}
-	}
-
-	filtered = append(filtered, runes[start:]...)
-
-	return string(filtered)
-}
-
-func (m *DfaModel) Replace(text string, repl rune) string {
-	var found bool
-	var now *node
-
-	start := 0
-	parent := m.root
-	runes := []rune(text)
-	length := len(runes)
-
-	for pos := 0; pos < length; pos++ {
-		now, found = parent.children[runes[pos]]
-
-		if !found || (!now.isLeaf && pos == length-1) {
-			parent = m.root
-			pos = start
-			start++
-			continue
-		}
-
-		if now.isLeaf && start <= pos {
-			for i := start; i <= pos; i++ {
-				runes[i] = repl
-			}
-		}
-
-		parent = now
-	}
-
-	return string(runes)
-}
-
-func (m *DfaModel) IsSensitive(text string) bool {
-	return m.FindOne(text) != ""
-}
-
-func (m *DfaModel) FindOne(text string) string {
-	var found bool
-	var now *node
-
-	start := 0
-	parent := m.root
-	runes := []rune(text)
-	length := len(runes)
-
-	for pos := 0; pos < length; pos++ {
-		now, found = parent.children[runes[pos]]
-
-		if !found || (!now.isLeaf && pos == length-1) {
-			parent = m.root
-			pos = start
-			start++
-			continue
-		}
-
-		if now.isLeaf && start <= pos {
-			return string(runes[start : pos+1])
-		}
-
-		parent = now
-	}
-
-	return ""
-}
-
 func (m *DfaModel) FindAll(text string) []string {
-	var matches []string
-	var found bool
-	var now *node
+	var matches []string // stores words that match in dict
+	var found bool       // if current rune in node's map
+	var now *dfaNode     // current node
 
 	start := 0
 	parent := m.root
@@ -234,7 +136,7 @@ func (m *DfaModel) FindAll(text string) []string {
 func (m *DfaModel) FindAllCount(text string) map[string]int {
 	res := make(map[string]int)
 	var found bool
-	var now *node
+	var now *dfaNode
 
 	start := 0
 	parent := m.root
@@ -266,4 +168,102 @@ func (m *DfaModel) FindAllCount(text string) map[string]int {
 	}
 
 	return res
+}
+
+func (m *DfaModel) FindOne(text string) string {
+	var found bool
+	var now *dfaNode
+
+	start := 0
+	parent := m.root
+	runes := []rune(text)
+	length := len(runes)
+
+	for pos := 0; pos < length; pos++ {
+		now, found = parent.children[runes[pos]]
+
+		if !found || (!now.isLeaf && pos == length-1) {
+			parent = m.root
+			pos = start
+			start++
+			continue
+		}
+
+		if now.isLeaf && start <= pos {
+			return string(runes[start : pos+1])
+		}
+
+		parent = now
+	}
+
+	return ""
+}
+
+func (m *DfaModel) IsSensitive(text string) bool {
+	return m.FindOne(text) != ""
+}
+
+func (m *DfaModel) Replace(text string, repl rune) string {
+	var found bool
+	var now *dfaNode
+
+	start := 0
+	parent := m.root
+	runes := []rune(text)
+	length := len(runes)
+
+	for pos := 0; pos < length; pos++ {
+		now, found = parent.children[runes[pos]]
+
+		if !found || (!now.isLeaf && pos == length-1) {
+			parent = m.root
+			pos = start
+			start++
+			continue
+		}
+
+		if now.isLeaf && start <= pos {
+			for i := start; i <= pos; i++ {
+				runes[i] = repl
+			}
+		}
+
+		parent = now
+	}
+
+	return string(runes)
+}
+
+func (m *DfaModel) Remove(text string) string {
+	var found bool
+	var now *dfaNode
+
+	start := 0 // 从文本的第几个文字开始匹配
+	parent := m.root
+	runes := []rune(text)
+	length := len(runes)
+	filtered := make([]rune, 0, length)
+
+	for pos := 0; pos < length; pos++ {
+		now, found = parent.children[runes[pos]]
+
+		if !found || (!now.isLeaf && pos == length-1) {
+			filtered = append(filtered, runes[start])
+			parent = m.root
+			pos = start
+			start++
+			continue
+		}
+
+		if now.isLeaf {
+			start = pos + 1
+			parent = m.root
+		} else {
+			parent = now
+		}
+	}
+
+	filtered = append(filtered, runes[start:]...)
+
+	return string(filtered)
 }

@@ -12,6 +12,7 @@ const (
 
 const (
 	FilterDfa = iota
+	FilterAc
 )
 
 type StoreOption struct {

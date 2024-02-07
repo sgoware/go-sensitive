@@ -3,7 +3,7 @@ package store
 import "io"
 
 type (
-	Model interface {
+	Store interface {
 		LoadDictPath(path ...string) error
 		LoadDictHttp(url ...string) error
 		LoadDict(reader io.Reader) error

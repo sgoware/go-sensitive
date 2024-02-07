@@ -3,23 +3,22 @@ package sensitive
 import (
 	"github.com/sgoware/go-sensitive/filter"
 	"github.com/sgoware/go-sensitive/store"
-	"sync"
 )
 
 type Manager struct {
-	store  store.Model
-	filter filter.Model
-
-	filterMux sync.RWMutex
+	store.Store
+	filter.Filter
 }
 
 func NewFilter(storeOption StoreOption, filterOption FilterOption) *Manager {
-	var filterStore store.Model
-	var myFilter filter.Model
+	var filterStore store.Store
+	var myFilter filter.Filter
 
 	switch storeOption.Type {
 	case StoreMemory:
 		filterStore = store.NewMemoryModel()
+	default:
+		panic("invalid store type")
 	}
 
 	switch filterOption.Type {
@@ -29,21 +28,18 @@ func NewFilter(storeOption StoreOption, filterOption FilterOption) *Manager {
 		go dfaModel.Listen(filterStore.GetAddChan(), filterStore.GetDelChan())
 
 		myFilter = dfaModel
+	case FilterAc:
+		acModel := filter.NewAcModel()
+
+		go acModel.Listen(filterStore.GetAddChan(), filterStore.GetDelChan())
+
+		myFilter = acModel
+	default:
+		panic("invalid filter type")
 	}
 
 	return &Manager{
-		store:  filterStore,
-		filter: myFilter,
+		Store:  filterStore,
+		Filter: myFilter,
 	}
-}
-
-func (m *Manager) GetStore() store.Model {
-	return m.store
-}
-
-func (m *Manager) GetFilter() filter.Model {
-	m.filterMux.RLock()
-	myFilter := m.filter
-	m.filterMux.RUnlock()
-	return myFilter
 }

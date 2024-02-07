@@ -5,13 +5,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
+	"net/http"
+	"os"
+
 	"github.com/imroc/req/v3"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"io"
-	"net/http"
-	"os"
 )
 
 const (
@@ -25,6 +26,7 @@ type MongoConfig struct {
 	Password   string
 	Database   string
 	Collection string
+	FieldName  string
 }
 
 type doc struct {
@@ -33,7 +35,9 @@ type doc struct {
 }
 
 type MongoModel struct {
-	store   *mongo.Collection
+	store     *mongo.Collection
+	fieldName string
+
 	addChan chan string
 	delChan chan string
 }
@@ -84,7 +88,9 @@ func NewMongoModel(config *MongoConfig) *MongoModel {
 	}
 
 	return &MongoModel{
-		store:   collection,
+		store:     collection,
+		fieldName: config.FieldName,
+
 		addChan: make(chan string),
 		delChan: make(chan string),
 	}
@@ -155,7 +161,7 @@ func (m *MongoModel) LoadDict(reader io.Reader) error {
 		word := string(line)
 
 		words = append(words, bson.D{
-			{"word", word},
+			{m.fieldName, word},
 		})
 
 		m.addChan <- word

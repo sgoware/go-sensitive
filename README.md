@@ -14,7 +14,7 @@ English | [中文](README-zh_cn.md)
     - `IsSensitive()` Check whether the text has sensitive word
     - `FindOne()` return first sensitive word that has been found in the text
     - `FindAll()` return all sensitive word that has been found in the text
-    - `FindAllCount()` return all sensitive word with its count that has been found in the text
+    - `FindAllCount()` return all sensitive[README-zh_cn.md](README-zh_cn.md) word with its count that has been found in the text
 - support multiple data sources with dynamic modification
     - support memory storage
     - support mysql storage
@@ -23,7 +23,7 @@ English | [中文](README-zh_cn.md)
     - support dynamic add/del sensitive word while running
 - support multiple filter algorithms
     - **DFA** use `trie tree`  to filter sensitive words
-
+    - **Aho–Corasick algorithm** 
 ## ⚙ Usage
 
 ```go
